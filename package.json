@@ -1,0 +1,46 @@
+{
+  "name": "react-native-item-select",
+  "version": "0.0.1",
+  "description": "List or Grid viewed item(s) picker for React Native",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "eslint index.js {bin,lib}/*.js",
+    "build": "mkdir -p dist && npx babel ./{,src}/*.js --out-dir ./dist/",
+    "dev": "mkdir -p dist && npx babel --watch ./{,src}/*.js --out-dir ./dist/"
+  },
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vicke4/react-native-item-select.git"
+  },
+  "keywords": [
+    "react-native",
+    "select",
+    "multiselect",
+    "list-view",
+    "grid-view"
+  ],
+  "author": "Ganapathy S",
+  "license": "MIT",
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
+  },
+  "bugs": {
+    "url": "https://github.com/vicke4/react-native-item-select/issues"
+  },
+  "homepage": "https://github.com/vicke4/react-native-item-select#readme",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-eslint": "^8.2.6",
+    "babel-preset-react-native": "^4.0.0",
+    "eslint": "^5.4.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-react": "^7.11.1",
+    "react": "^16.4.2"
+  }
+}
