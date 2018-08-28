@@ -6,6 +6,34 @@ import {
 import Item from './item';
 import styles from './style';
 
+const SubmitButton = (props) => {
+    const {
+        buttonText,
+        buttonView,
+        submitOpacity,
+    } = styles;
+    const {
+        disableBtn, floatingBtn, onSubmit, selectedItem, submitBtnTitle,
+    } = props;
+    const opacityStyle = [
+        submitOpacity,
+        floatingBtn && { position: 'absolute' },
+        disableBtn && { opacity: 0.5 },
+    ];
+
+    return (
+        <TouchableOpacity
+            disabled={disableBtn}
+            onPress={() => { onSubmit(selectedItem); }}
+            style={opacityStyle}
+        >
+            <View style={buttonView}>
+                <Text style={buttonText}>{submitBtnTitle || 'Submit'}</Text>
+            </View>
+        </TouchableOpacity>
+    );
+};
+
 class ItemSelect extends Component {
     constructor(props) {
         super(props);
@@ -18,7 +46,7 @@ class ItemSelect extends Component {
 
         Object.keys(newState).forEach((v) => { newState[v] = false; });
         newState[index] = !selected;
-        newState.selectedItem = item;
+        newState.selectedItem = selected ? null : item;
 
         this.setState(newState);
     }
@@ -27,27 +55,36 @@ class ItemSelect extends Component {
     static getChunks(data, chunk) {
         let i;
         let j;
-        const temparray = [];
+        const tempArray = [];
 
         for (i = 0, j = data.length; i < j; i += chunk) {
-            temparray.push(data.slice(i, i + chunk));
+            tempArray.push(data.slice(i, i + chunk));
         }
 
-        return temparray;
+        return tempArray;
     }
 
     render() {
-        const { data, itemComponent, onSubmit } = this.props;
+        const {
+            data, itemComponent, onSubmit, countPerRow, floatSubmitBtn, submitBtnTitle,
+            tickPosition, tickStyle,
+        } = this.props;
         const { selectedItem } = this.state;
-        const formattedData = ItemSelect.getChunks(data, 2);
+        const formattedData = ItemSelect.getChunks(data, countPerRow || 2);
         const formattedDataLength = formattedData.length;
         const {
-            buttonText,
-            buttonView,
             container,
-            floatingOpacity,
             itemWrapper,
         } = styles;
+        const renderSubmitBtn = () => (
+            <SubmitButton
+                floatingBtn={floatSubmitBtn}
+                selectedItem={selectedItem}
+                disableBtn={!selectedItem}
+                onSubmit={onSubmit}
+                submitBtnTitle={submitBtnTitle}
+            />
+        );
 
         return (
             <View style={container}>
@@ -57,7 +94,7 @@ class ItemSelect extends Component {
                             formattedData.map((chunkData, index) => (
                                 <View key={String(index)} style={itemWrapper}>
                                     {
-                                        chunkData.map((d, chunkIndex) => {
+                                        chunkData.map((item, chunkIndex) => {
                                             const chunkDataLength = chunkData.length;
                                             const { [`${index}_${chunkIndex}`]: isSelected } = this.state;
                                             return (
@@ -66,10 +103,12 @@ class ItemSelect extends Component {
                                                         && (chunkDataLength - 1 === chunkIndex)}
                                                     index={`${index}_${chunkIndex}`}
                                                     onSelect={this.onSelect}
-                                                    key={d.name}
+                                                    key={String(chunkIndex)}
                                                     selected={isSelected}
                                                     itemComponent={itemComponent}
-                                                    item={d}
+                                                    item={item}
+                                                    tickPosition={tickPosition}
+                                                    tickStyle={tickStyle}
                                                 />
                                             );
                                         })
@@ -78,18 +117,11 @@ class ItemSelect extends Component {
                             ))
                         }
                     </View>
-                    {/* <Button title="Submit" onPress={() => { }} /> */}
+
+                    { !floatSubmitBtn && renderSubmitBtn() }
                 </ScrollView>
 
-                <TouchableOpacity
-                    // disabled
-                    onPress={() => { onSubmit(selectedItem); }}
-                    style={floatingOpacity}
-                >
-                    <View style={buttonView}>
-                        <Text style={buttonText}>Submit</Text>
-                    </View>
-                </TouchableOpacity>
+                { floatSubmitBtn && renderSubmitBtn() }
             </View>
         );
     }

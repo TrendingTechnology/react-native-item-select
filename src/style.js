@@ -9,16 +9,18 @@ export default StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',
     },
-    floatingOpacity: {
+    submitOpacity: {
         bottom: 5,
         padding: 10,
-        position: 'absolute',
         width: '100%',
     },
     buttonView: {
         borderRadius: 5,
-        backgroundColor: '#2196F3',
+        backgroundColor: '#00955b',
         padding: 8,
+    },
+    buttonDisabled: {
+        opacity: 0.7,
     },
     buttonText: {
         color: 'white',
@@ -26,7 +28,6 @@ export default StyleSheet.create({
     },
     itemTouchableHighlight: {
         flex: 1,
-        padding: 15,
         margin: 10,
         borderRadius: 5,
         borderWidth: 1.5,

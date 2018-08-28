@@ -3,27 +3,47 @@ import { View, TouchableHighlight, Text } from 'react-native';
 
 import styles from './style';
 
-const CheckMark = () => (
-    <View style={{ justifyContent: 'flex-start', alignItems: 'flex-end' }}>
-        <Text style={
-            {
-                backgroundColor: 'green',
-                color: 'white',
-                borderRadius: 12,
-                paddingTop: 3,
-                marginRight: 1,
-                paddingBottom: 3,
-                paddingRight: 6,
-                paddingLeft: 6,
-                fontSize: 12,
-                fontWeight: 'bold',
+const positionMapping = {
+    topRight: { right: 0 },
+    topMiddle: { left: 0, right: 0 },
+    bottomLeft: { bottom: 0 },
+    bottomRight: { bottom: 0, right: 0 },
+    bottomMiddle: { bottom: 0, left: 0, right: 0 },
+    leftMiddle: { top: 0, bottom: 0 },
+    rightMiddle: { top: 0, bottom: 0, right: 0 },
+    middle: {
+        top: 0, bottom: 0, left: 0, right: 0,
+    },
+};
+
+const CheckMark = (props) => {
+    const { tickPosition } = props;
+    const viewStyle = {
+        position: 'absolute', justifyContent: 'center', alignItems: 'center', zIndex: 1,
+    };
+
+    return (
+        <View style={{ ...viewStyle, ...positionMapping[tickPosition] }}>
+            <Text style={
+                {
+                    backgroundColor: 'green',
+                    color: 'white',
+                    borderRadius: 12,
+                    paddingTop: 3,
+                    marginRight: 1,
+                    paddingBottom: 3,
+                    paddingRight: 6,
+                    paddingLeft: 6,
+                    fontSize: 12,
+                    fontWeight: 'bold',
+                }
             }
-        }
-        >
-            &#x2713;
-        </Text>
-    </View>
-);
+            >
+                &#x2713;
+            </Text>
+        </View>
+    );
+};
 
 class Item extends Component {
     constructor(props) {
@@ -43,13 +63,15 @@ class Item extends Component {
 
     render() {
         const {
-            item, itemComponent, index, onSelect, isLast,
+            item, itemComponent, index, onSelect, isLast, tickPosition, tickStyle,
         } = this.props;
         const { selected } = this.state;
         const { itemTouchableHighlight } = styles;
         const borderColor = selected ? 'green' : '#CECECE';
         const highlightStyle = [itemTouchableHighlight];
-        highlightStyle.push({ borderColor }, { marginBottom: isLast ? 55 : 10 });
+        const tickPos = tickPosition || (tickStyle === 'overlayCheck' ? 'middle' : 'topRight');
+        highlightStyle.push({ borderColor, opacity: isLast ? 1 : 1 }, { marginBottom: isLast ? 10 : 10 });
+        highlightStyle.push(tickStyle === 'overlayCheck' && selected && { backgroundColor: '#cdcdcd' });
 
         return (
             <TouchableHighlight
@@ -58,10 +80,9 @@ class Item extends Component {
                 key={item.name}
                 style={highlightStyle}
             >
-                <View style={{ flex: 1, flexDirection: 'row-reverse' }}>
-                    {selected ? <CheckMark /> : null}
-
+                <View style={{ padding: 5 }}>
                     <View style={{ flexGrow: 1 }}>
+                        {selected && <CheckMark tickPosition={tickPos} />}
                         {itemComponent(item)}
                     </View>
                 </View>
