@@ -13,18 +13,21 @@ const SubmitButton = (props) => {
         submitOpacity,
     } = styles;
     const {
-        disableBtn, floatingBtn, onSubmit, selectedItem, submitBtnTitle,
+        disableBtn, floatingBtn, onSubmit, selectedItem, submitBtnTitle, multiselect,
     } = props;
     const opacityStyle = [
         submitOpacity,
         floatingBtn && { position: 'absolute' },
         disableBtn && { opacity: 0.5 },
     ];
+    let submitItem = selectedItem;
+
+    if (multiselect) submitItem = selectedItem && selectedItem.map(obj => obj.item);
 
     return (
         <TouchableOpacity
             disabled={disableBtn}
-            onPress={() => { onSubmit(selectedItem); }}
+            onPress={() => { onSubmit(submitItem); }}
             style={opacityStyle}
         >
             <View style={buttonView}>
@@ -35,19 +38,43 @@ const SubmitButton = (props) => {
 };
 
 class ItemSelect extends Component {
+    static isDisabled(selectedItem, multiselect, minSelectCount) {
+        return (multiselect && selectedItem && selectedItem.length < minSelectCount) || !selectedItem;
+    }
+
     constructor(props) {
         super(props);
-        this.state = {};
+
+        const { multiselect } = props;
+
+        this.state = {
+            indexMapping: {},
+            selectedItem: multiselect && [],
+        };
         this.onSelect = this.onSelect.bind(this);
     }
 
     onSelect(index, selected, item) {
         const newState = { ...this.state };
+        const { indexMapping, selectedItem } = newState;
+        let tempSelected = selectedItem;
+        // console.log('Prev State', newState);
+        const { multiselect } = this.props;
 
-        Object.keys(newState).forEach((v) => { newState[v] = false; });
-        newState[index] = !selected;
-        newState.selectedItem = selected ? null : item;
+        if (!multiselect) Object.keys(indexMapping).forEach((i) => { indexMapping[i] = false; });
 
+        indexMapping[index] = !selected;
+
+        if (multiselect) {
+            if (selected) tempSelected = tempSelected.filter(obj => obj.index !== index);
+            else tempSelected.push({ index, item });
+        } else {
+            tempSelected = selected ? null : item;
+        }
+
+        newState.selectedItem = tempSelected;
+
+        // console.log('New State', newState);
         this.setState(newState);
     }
 
@@ -65,12 +92,13 @@ class ItemSelect extends Component {
     }
 
     render() {
+        const { isDisabled, getChunks } = ItemSelect;
         const {
-            data, itemComponent, onSubmit, countPerRow, floatSubmitBtn, submitBtnTitle,
-            tickPosition, tickStyle,
+            data, onSubmit, countPerRow, floatSubmitBtn, submitBtnTitle,
+            multiselect, minSelectCount, maxSelectCount,
         } = this.props;
         const { selectedItem } = this.state;
-        const formattedData = ItemSelect.getChunks(data, countPerRow || 2);
+        const formattedData = getChunks(data, countPerRow || 2);
         const formattedDataLength = formattedData.length;
         const {
             container,
@@ -78,9 +106,10 @@ class ItemSelect extends Component {
         } = styles;
         const renderSubmitBtn = () => (
             <SubmitButton
+                multiselect={multiselect}
                 floatingBtn={floatSubmitBtn}
                 selectedItem={selectedItem}
-                disableBtn={!selectedItem}
+                disableBtn={isDisabled(selectedItem, multiselect, minSelectCount || 1)}
                 onSubmit={onSubmit}
                 submitBtnTitle={submitBtnTitle}
             />
@@ -96,19 +125,21 @@ class ItemSelect extends Component {
                                     {
                                         chunkData.map((item, chunkIndex) => {
                                             const chunkDataLength = chunkData.length;
-                                            const { [`${index}_${chunkIndex}`]: isSelected } = this.state;
+                                            const {
+                                                indexMapping: { [`${index}_${chunkIndex}`]: isSelected },
+                                            } = this.state;
+
                                             return (
                                                 <Item
+                                                    denySelect={multiselect && selectedItem.length === maxSelectCount}
                                                     isLast={(formattedDataLength - 1 === index)
                                                         && (chunkDataLength - 1 === chunkIndex)}
                                                     index={`${index}_${chunkIndex}`}
                                                     onSelect={this.onSelect}
                                                     key={String(chunkIndex)}
                                                     selected={isSelected}
-                                                    itemComponent={itemComponent}
                                                     item={item}
-                                                    tickPosition={tickPosition}
-                                                    tickStyle={tickStyle}
+                                                    {...this.props}
                                                 />
                                             );
                                         })

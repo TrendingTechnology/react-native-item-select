@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { View, TouchableHighlight, Text } from 'react-native';
+import {
+    Alert, View, TouchableHighlight, Text,
+} from 'react-native';
 
 import styles from './style';
 
@@ -49,6 +51,7 @@ class Item extends Component {
     constructor(props) {
         super(props);
 
+        this.handleSelect = this.handleSelect.bind(this);
         this.state = {
             selected: false,
         };
@@ -61,23 +64,36 @@ class Item extends Component {
         if (selected !== prevSelected) this.setState({ selected });
     }
 
+    handleSelect() {
+        const { selected } = this.state;
+        const {
+            denySelect, index, onSelect, item, maxSelectCount, maxSelectAlertTxt,
+        } = this.props;
+
+        if (denySelect && !selected) {
+            return Alert.alert('', maxSelectAlertTxt || `You can't select more than ${maxSelectCount} items`);
+        }
+
+        return onSelect(index, selected, item);
+    }
+
     render() {
         const {
-            item, itemComponent, index, onSelect, isLast, tickPosition, tickStyle,
+            item, itemComponent, index, isLast, tickPosition, tickStyle, multiselect,
         } = this.props;
         const { selected } = this.state;
         const { itemTouchableHighlight } = styles;
         const borderColor = selected ? 'green' : '#CECECE';
         const highlightStyle = [itemTouchableHighlight];
-        const tickPos = tickPosition || (tickStyle === 'overlayCheck' ? 'middle' : 'topRight');
+        const tickPos = tickPosition || (tickStyle === 'overlayCheck' || multiselect ? 'middle' : 'topRight');
         highlightStyle.push({ borderColor, opacity: isLast ? 1 : 1 }, { marginBottom: isLast ? 10 : 10 });
-        highlightStyle.push(tickStyle === 'overlayCheck' && selected && { backgroundColor: '#cdcdcd' });
+        highlightStyle.push(multiselect && tickStyle !== 'check' && selected && { backgroundColor: '#cdcdcd' });
 
         return (
             <TouchableHighlight
                 underlayColor="#ddd"
-                onPress={() => { onSelect(index, selected, item); }}
-                key={item.name}
+                onPress={this.handleSelect}
+                key={index}
                 style={highlightStyle}
             >
                 <View style={{ padding: 5 }}>
