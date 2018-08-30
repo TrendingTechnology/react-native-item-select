@@ -6,19 +6,19 @@ import {
 import Item from './item';
 import styles from './style';
 
-const SubmitButton = (props) => {
+const SubmitButton = ({
+    disableBtn, floatSubmitBtn, onSubmit, selectedItem, submitBtnTitle, multiselect, submitBtnWidth,
+}) => {
     const {
         buttonText,
         buttonView,
         submitOpacity,
     } = styles;
-    const {
-        disableBtn, floatingBtn, onSubmit, selectedItem, submitBtnTitle, multiselect,
-    } = props;
     const opacityStyle = [
         submitOpacity,
-        floatingBtn && { position: 'absolute' },
-        disableBtn && { opacity: 0.5 },
+        floatSubmitBtn && { position: 'absolute' },
+        disableBtn && { opacity: 0.7 },
+        submitBtnWidth && { marginHorizontal: `${(100 - submitBtnWidth) / 2}%` },
     ];
     let submitItem = selectedItem;
 
@@ -95,57 +95,59 @@ class ItemSelect extends Component {
         const { isDisabled, getChunks } = ItemSelect;
         const {
             data, onSubmit, countPerRow, floatSubmitBtn, submitBtnTitle,
-            multiselect, minSelectCount, maxSelectCount,
+            multiselect, minSelectCount, maxSelectCount, lastRowMargin, submitBtnWidth,
         } = this.props;
         const { selectedItem } = this.state;
         const formattedData = getChunks(data, countPerRow || 2);
-        const formattedDataLength = formattedData.length;
-        const {
-            container,
-            itemWrapper,
-        } = styles;
+        const { container, itemWrapper } = styles;
+        const submitBtnProps = {
+            multiselect, floatSubmitBtn, onSubmit, selectedItem, submitBtnTitle, submitBtnWidth,
+        };
         const renderSubmitBtn = () => (
             <SubmitButton
-                multiselect={multiselect}
-                floatingBtn={floatSubmitBtn}
-                selectedItem={selectedItem}
                 disableBtn={isDisabled(selectedItem, multiselect, minSelectCount || 1)}
-                onSubmit={onSubmit}
-                submitBtnTitle={submitBtnTitle}
+                {...submitBtnProps}
             />
         );
+        let extraMargin = {};
 
         return (
             <View style={container}>
                 <ScrollView>
                     <View style={container}>
                         {
-                            formattedData.map((chunkData, index) => (
-                                <View key={String(index)} style={itemWrapper}>
-                                    {
-                                        chunkData.map((item, chunkIndex) => {
-                                            const chunkDataLength = chunkData.length;
-                                            const {
-                                                indexMapping: { [`${index}_${chunkIndex}`]: isSelected },
-                                            } = this.state;
+                            formattedData.map((chunkData, index) => {
+                                const isLast = formattedData.length === (index + 1);
 
-                                            return (
-                                                <Item
-                                                    denySelect={multiselect && selectedItem.length === maxSelectCount}
-                                                    isLast={(formattedDataLength - 1 === index)
-                                                        && (chunkDataLength - 1 === chunkIndex)}
-                                                    index={`${index}_${chunkIndex}`}
-                                                    onSelect={this.onSelect}
-                                                    key={String(chunkIndex)}
-                                                    selected={isSelected}
-                                                    item={item}
-                                                    {...this.props}
-                                                />
-                                            );
-                                        })
-                                    }
-                                </View>
-                            ))
+                                if (floatSubmitBtn && isLast) {
+                                    extraMargin = { marginBottom: lastRowMargin || 50 };
+                                }
+
+                                return (
+                                    <View key={String(index)} style={[itemWrapper, extraMargin]}>
+                                        {
+                                            chunkData.map((item, chunkIndex) => {
+                                                const {
+                                                    indexMapping: { [`${index}_${chunkIndex}`]: isSelected },
+                                                } = this.state;
+
+                                                return (
+                                                    <Item
+                                                        denySelect={multiselect
+                                                            && selectedItem.length === maxSelectCount}
+                                                        index={`${index}_${chunkIndex}`}
+                                                        onSelect={this.onSelect}
+                                                        key={String(chunkIndex)}
+                                                        selected={isSelected}
+                                                        item={item}
+                                                        {...this.props}
+                                                    />
+                                                );
+                                            })
+                                        }
+                                    </View>
+                                );
+                            })
                         }
                     </View>
 

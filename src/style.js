@@ -12,7 +12,8 @@ export default StyleSheet.create({
     submitOpacity: {
         bottom: 5,
         padding: 10,
-        width: '100%',
+        left: 0,
+        right: 0,
     },
     buttonView: {
         borderRadius: 5,
