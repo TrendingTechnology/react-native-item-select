@@ -18,30 +18,17 @@ const positionMapping = {
     },
 };
 
-const CheckMark = (props) => {
-    const { tickPosition } = props;
+const CheckMark = ({ customTickTxt, textStyle, tickPos }) => {
+    const { tickTxt } = styles;
     const viewStyle = {
         position: 'absolute', justifyContent: 'center', alignItems: 'center', zIndex: 1,
     };
+    const textContent = customTickTxt || <Text>&#x2713;</Text>;
 
     return (
-        <View style={{ ...viewStyle, ...positionMapping[tickPosition] }}>
-            <Text style={
-                {
-                    backgroundColor: 'green',
-                    color: 'white',
-                    borderRadius: 12,
-                    paddingTop: 3,
-                    marginRight: 1,
-                    paddingBottom: 3,
-                    paddingRight: 6,
-                    paddingLeft: 6,
-                    fontSize: 12,
-                    fontWeight: 'bold',
-                }
-            }
-            >
-                &#x2713;
+        <View style={{ ...viewStyle, ...positionMapping[tickPos] }}>
+            <Text style={[tickTxt, textStyle]}>
+                {textContent}
             </Text>
         </View>
     );
@@ -79,15 +66,25 @@ class Item extends Component {
 
     render() {
         const {
-            item, itemComponent, index, isLast, tickPosition, tickStyle, multiselect,
+            extraItemHighlighProps, item, itemComponent, index, tickPosition,
+            tickStyle, tickTxt, multiselect, styles: customStyles,
         } = this.props;
+        const {
+            itemBoxHighlight, itemComponentWrapper, activeItemBoxHighlight, tickTextWrapperView,
+        } = customStyles || {};
         const { selected } = this.state;
         const { itemTouchableHighlight } = styles;
         const borderColor = selected ? 'green' : '#CECECE';
         const highlightStyle = [itemTouchableHighlight];
         const tickPos = tickPosition || (tickStyle === 'overlayCheck' || multiselect ? 'middle' : 'topRight');
-        highlightStyle.push({ borderColor, opacity: isLast ? 1 : 1 }, { marginBottom: isLast ? 10 : 10 });
+        const tickProps = {
+            textStyle: tickTextWrapperView, customTickTxt: tickTxt, tickPos, tickStyle,
+        };
+
+        highlightStyle.push({ borderColor }, { marginBottom: 10 }, itemBoxHighlight);
         highlightStyle.push(multiselect && tickStyle !== 'check' && selected && { backgroundColor: '#cdcdcd' });
+
+        if (selected) highlightStyle.push(activeItemBoxHighlight);
 
         return (
             <TouchableHighlight
@@ -95,10 +92,11 @@ class Item extends Component {
                 onPress={this.handleSelect}
                 key={index}
                 style={highlightStyle}
+                {...extraItemHighlighProps}
             >
-                <View style={{ padding: 5 }}>
+                <View style={[{ padding: 5 }, itemComponentWrapper]}>
                     <View style={{ flexGrow: 1 }}>
-                        {selected && <CheckMark tickPosition={tickPos} />}
+                        {selected && <CheckMark {...tickProps} />}
                         {itemComponent(item)}
                     </View>
                 </View>

@@ -7,19 +7,22 @@ import Item from './item';
 import styles from './style';
 
 const SubmitButton = ({
-    disableBtn, floatSubmitBtn, onSubmit, selectedItem, submitBtnTitle, multiselect, submitBtnWidth,
+    customStyles, disableBtn, extraBtnOpacityProps, floatSubmitBtn, onSubmit,
+    selectedItem, submitBtnTitle, multiselect, submitBtnWidth,
 }) => {
     const {
-        buttonText,
-        buttonView,
-        submitOpacity,
-    } = styles;
+        btn, btnOpacity, btnTxt, disabledBtnOpacity, disabledBtn, disabledBtnTxt,
+    } = customStyles || {};
+    const { buttonText, buttonView, submitOpacity } = styles;
     const opacityStyle = [
         submitOpacity,
         floatSubmitBtn && { position: 'absolute' },
-        disableBtn && { opacity: 0.7 },
+        disableBtn && { opacity: 0.7, ...disabledBtnOpacity },
         submitBtnWidth && { marginHorizontal: `${(100 - submitBtnWidth) / 2}%` },
+        btnOpacity,
     ];
+    const buttonViewStyle = disableBtn ? disabledBtn : btn;
+    const buttonTextStyle = disableBtn ? disabledBtnTxt : btnTxt;
     let submitItem = selectedItem;
 
     if (multiselect) submitItem = selectedItem && selectedItem.map(obj => obj.item);
@@ -29,9 +32,10 @@ const SubmitButton = ({
             disabled={disableBtn}
             onPress={() => { onSubmit(submitItem); }}
             style={opacityStyle}
+            {...extraBtnOpacityProps}
         >
-            <View style={buttonView}>
-                <Text style={buttonText}>{submitBtnTitle || 'Submit'}</Text>
+            <View style={[buttonView, buttonViewStyle]}>
+                <Text style={[buttonText, buttonTextStyle]}>{submitBtnTitle || 'Submit'}</Text>
             </View>
         </TouchableOpacity>
     );
@@ -58,7 +62,6 @@ class ItemSelect extends Component {
         const newState = { ...this.state };
         const { indexMapping, selectedItem } = newState;
         let tempSelected = selectedItem;
-        // console.log('Prev State', newState);
         const { multiselect } = this.props;
 
         if (!multiselect) Object.keys(indexMapping).forEach((i) => { indexMapping[i] = false; });
@@ -74,7 +77,6 @@ class ItemSelect extends Component {
 
         newState.selectedItem = tempSelected;
 
-        // console.log('New State', newState);
         this.setState(newState);
     }
 
@@ -94,14 +96,21 @@ class ItemSelect extends Component {
     render() {
         const { isDisabled, getChunks } = ItemSelect;
         const {
-            data, onSubmit, countPerRow, floatSubmitBtn, submitBtnTitle,
-            multiselect, minSelectCount, maxSelectCount, lastRowMargin, submitBtnWidth,
+            styles: customStyles, data, onSubmit, countPerRow, floatSubmitBtn, submitBtnTitle,
+            multiselect, minSelectCount, maxSelectCount, lastRowMargin, submitBtnWidth, extraBtnOpacityProps,
         } = this.props;
         const { selectedItem } = this.state;
         const formattedData = getChunks(data, countPerRow || 2);
         const { container, itemWrapper } = styles;
         const submitBtnProps = {
-            multiselect, floatSubmitBtn, onSubmit, selectedItem, submitBtnTitle, submitBtnWidth,
+            customStyles,
+            extraBtnOpacityProps,
+            multiselect,
+            floatSubmitBtn,
+            onSubmit,
+            selectedItem,
+            submitBtnTitle,
+            submitBtnWidth,
         };
         const renderSubmitBtn = () => (
             <SubmitButton

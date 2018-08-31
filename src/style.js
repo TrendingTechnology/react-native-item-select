@@ -33,4 +33,16 @@ export default StyleSheet.create({
         borderRadius: 5,
         borderWidth: 1.5,
     },
+    tickTxt: {
+        backgroundColor: 'green',
+        color: 'white',
+        borderRadius: 12,
+        paddingTop: 3,
+        marginRight: 1,
+        paddingBottom: 3,
+        paddingRight: 6,
+        paddingLeft: 6,
+        fontSize: 12,
+        fontWeight: 'bold',
+    },
 });
