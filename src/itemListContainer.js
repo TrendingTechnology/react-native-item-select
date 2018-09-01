@@ -21,8 +21,6 @@ const SubmitButton = ({
         submitBtnWidth && { marginHorizontal: `${(100 - submitBtnWidth) / 2}%` },
         btnOpacity,
     ];
-    const buttonViewStyle = disableBtn ? disabledBtn : btn;
-    const buttonTextStyle = disableBtn ? disabledBtnTxt : btnTxt;
     let submitItem = selectedItem;
 
     if (multiselect) submitItem = selectedItem && selectedItem.map(obj => obj.item);
@@ -34,8 +32,10 @@ const SubmitButton = ({
             style={opacityStyle}
             {...extraBtnOpacityProps}
         >
-            <View style={[buttonView, buttonViewStyle]}>
-                <Text style={[buttonText, buttonTextStyle]}>{submitBtnTitle || 'Submit'}</Text>
+            <View style={[buttonView, btn, disableBtn ? disabledBtn : {}]}>
+                <Text style={[buttonText, btnTxt, disableBtn ? disabledBtnTxt : {}]}>
+                    {submitBtnTitle || 'Submit'}
+                </Text>
             </View>
         </TouchableOpacity>
     );
@@ -106,6 +106,7 @@ class ItemSelect extends Component {
         const { selectedItem } = this.state;
         const formattedData = getChunks(data, countPerRow || 2);
         const { container, itemWrapper } = styles;
+        const { rowWrapper } = customStyles;
         const submitBtnProps = {
             customStyles,
             extraBtnOpacityProps,
@@ -137,7 +138,7 @@ class ItemSelect extends Component {
                                 }
 
                                 return (
-                                    <View key={String(index)} style={[itemWrapper, extraMargin]}>
+                                    <View key={String(index)} style={[itemWrapper, extraMargin, rowWrapper]}>
                                         {
                                             chunkData.map((item, chunkIndex) => {
                                                 const {

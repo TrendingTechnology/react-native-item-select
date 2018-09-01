@@ -40,7 +40,7 @@ We can divide props into two types. One is mandatory other one is optional. With
   Name         | Type     | Description
 ---------------|----------|-----------------------------------------------------------------------
 data           | Array    | Array of items you pass to `itemComponent` callback.
-itemComponent  | Function | Takes a `data` prop item as a parameter and returns a React component.
+itemComponent  | Function | Takes 2 parameters and returns a React component. Two paramerts, `(item, selected)`. `item`: `data` prop item, `selected`: `boolean` that suggested whether the item is selected. `selected` boolean is useful when you want to alter the content if it is selected.
 onSubmit       | Function | Callback function that consumes selected item(s).
 
 ### Optional Props
@@ -65,7 +65,7 @@ styles                 |   Object   |       {}            |   For customer styli
 
 ## Styling
 
-You can alter the styles of any component of this library by passing appropriate prop. For now you can use 10 keys in styles prop to customize the look. They are, `btn`, `btnOpacity`, `btnTxt`, `disabledBtnOpacity`, `disabledBtn`, `disabledBtnTxt`, `itemBoxHighlight`, `activeItemBoxHighlight`, `tickTextWrapperView`, `itemComponentWrapper`.
+You can alter the styles of any component of this library by passing appropriate prop. For now you can use 10 keys in styles prop to customize the look. They are, `btn`, `btnOpacity`, `btnTxt`, `disabledBtnOpacity`, `disabledBtn`, `disabledBtnTxt`, `itemBoxHighlight`, `activeItemBoxHighlight`, `tickTxt`, `itemComponentWrapper`, `rowWrapper`
 
 ### Example
 
@@ -80,7 +80,7 @@ In the following component, styles prop will change the color of submit button, 
         {
             btn: { backgroundColor: '#2196F3' },
             disabledBtn: { backgroundColor: '#2196F3' },
-            tickTextWrapperView: { backgroundColor: '#2196F3' },
+            tickTxt: { backgroundColor: '#2196F3' },
             activeItemBoxHighlight: { borderColor: '#2196F3' },
         }
     }
@@ -107,9 +107,13 @@ You can use this to style the [`TouchableHighlight`](https://facebook.github.io/
 
 This is a View that wraps you item component. Wrapping order is like this `TouchableHighlight` > `View` > `itemComponent`. You can use this to get rid of the padding inside box. Refer [View style props](https://github.com/vhpoet/react-native-styling-cheat-sheet#view).
 
-#### `tickTextWrapperView`
+#### `tickTxt`
 
-You can use this to alter the `View` the encloses your tick character. **Tick color is changed here**. Refer [View style props](https://github.com/vhpoet/react-native-styling-cheat-sheet#view).
+You can use this to alter the `View` the encloses your tick character. **Tick color is changed here**. Refer [Text style props](https://github.com/vhpoet/react-native-styling-cheat-sheet#text).
+
+#### `rowWrapper`
+
+Used to alter the style of the View that wraps the items in a row.  Refer [View style props](https://github.com/vhpoet/react-native-styling-cheat-sheet#view).
 
 ## LICENSE
 

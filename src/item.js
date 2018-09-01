@@ -55,14 +55,14 @@ class Item extends PureComponent {
             tickStyle, tickTxt, multiselect, styles: customStyles, selected,
         } = this.props;
         const {
-            itemBoxHighlight, itemComponentWrapper, activeItemBoxHighlight, tickTextWrapperView,
+            itemBoxHighlight, itemComponentWrapper, activeItemBoxHighlight, tickTxt: textStyle,
         } = customStyles || {};
         const { itemTouchableHighlight } = styles;
         const borderColor = selected ? 'green' : '#CECECE';
         const highlightStyle = [itemTouchableHighlight];
         const tickPos = tickPosition || (tickStyle === 'overlayCheck' || multiselect ? 'middle' : 'topRight');
         const tickProps = {
-            textStyle: tickTextWrapperView, customTickTxt: tickTxt, tickPos, tickStyle,
+            textStyle, customTickTxt: tickTxt, tickPos, tickStyle,
         };
 
         highlightStyle.push({ borderColor }, { marginBottom: 10 }, itemBoxHighlight);
@@ -79,9 +79,9 @@ class Item extends PureComponent {
                 {...extraItemHighlighProps}
             >
                 <View style={[{ padding: 5 }, itemComponentWrapper]}>
-                    <View style={{ flexGrow: 1 }}>
+                    <View>
                         {selected && <CheckMark {...tickProps} />}
-                        {itemComponent(item)}
+                        {itemComponent(item, selected)}
                     </View>
                 </View>
             </TouchableHighlight>
