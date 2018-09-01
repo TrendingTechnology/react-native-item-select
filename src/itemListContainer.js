@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-    ScrollView, Text, TouchableOpacity, View,
+    Alert, ScrollView, Text, TouchableOpacity, View,
 } from 'react-native';
 
 import Item from './item';
@@ -62,7 +62,11 @@ class ItemSelect extends Component {
         const newState = { ...this.state };
         const { indexMapping, selectedItem } = newState;
         let tempSelected = selectedItem;
-        const { multiselect } = this.props;
+        const { multiselect, maxSelectAlertTxt, maxSelectCount } = this.props;
+
+        if (multiselect && selectedItem.length === maxSelectCount && !selected) {
+            return Alert.alert('', maxSelectAlertTxt || `You can't select more than ${maxSelectCount} items`);
+        }
 
         if (!multiselect) Object.keys(indexMapping).forEach((i) => { indexMapping[i] = false; });
 
@@ -77,7 +81,7 @@ class ItemSelect extends Component {
 
         newState.selectedItem = tempSelected;
 
-        this.setState(newState);
+        return this.setState(newState);
     }
 
     // Creates array of arrays for customizable grid layout
@@ -97,7 +101,7 @@ class ItemSelect extends Component {
         const { isDisabled, getChunks } = ItemSelect;
         const {
             styles: customStyles, data, onSubmit, countPerRow, floatSubmitBtn, submitBtnTitle,
-            multiselect, minSelectCount, maxSelectCount, lastRowMargin, submitBtnWidth, extraBtnOpacityProps,
+            multiselect, minSelectCount, lastRowMargin, submitBtnWidth, extraBtnOpacityProps,
         } = this.props;
         const { selectedItem } = this.state;
         const formattedData = getChunks(data, countPerRow || 2);
@@ -122,7 +126,7 @@ class ItemSelect extends Component {
 
         return (
             <View style={container}>
-                <ScrollView>
+                <ScrollView style={container}>
                     <View style={container}>
                         {
                             formattedData.map((chunkData, index) => {
@@ -142,8 +146,6 @@ class ItemSelect extends Component {
 
                                                 return (
                                                     <Item
-                                                        denySelect={multiselect
-                                                            && selectedItem.length === maxSelectCount}
                                                         index={`${index}_${chunkIndex}`}
                                                         onSelect={this.onSelect}
                                                         key={String(chunkIndex)}

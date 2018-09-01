@@ -10,7 +10,7 @@ Sometimes selecting items from dropdowns or checkboxes just don't cut it. You ma
   * [Optional Props](#optional-props)
 * [Styling](#styling)
   * [Example](#example-1)
-* [FAQs](#faqs)
+
 
 ## Installation
 
@@ -28,7 +28,8 @@ npm install --save react-native-item-select
 
 ## Example
 
-TODO: Update this
+```jsx
+```
 
 ## Props
 
@@ -40,7 +41,7 @@ We can divide props into two types. One is mandatory other one is optional. With
 ---------------|----------|-----------------------------------------------------------------------
 data           | Array    | Array of items you pass to `itemComponent` callback.
 itemComponent  | Function | Takes a `data` prop item as a parameter and returns a React component.
-onSubmit       | Function | Callback that function that consumes selected item(s).
+onSubmit       | Function | Callback function that consumes selected item(s).
 
 ### Optional Props
 
@@ -70,7 +71,7 @@ You can alter the styles of any component of this library by passing appropriate
 
 In the following component, styles prop will change the color of submit button, tick background and selected items border color to material blue.
 
-```
+```jsx
 <ReactNativeItemSelect
     data={data}
     itemComponent={this.itemComponent}
@@ -86,30 +87,30 @@ In the following component, styles prop will change the color of submit button, 
 />
 ```
 
-### `btn`, `disabledBtn`
+#### `btn`, `disabledBtn`
 
 For the Button View. You can use any of the [View style props](https://github.com/vhpoet/react-native-styling-cheat-sheet#view). Use `disabledBtn` key to style the button when it is in disabled state and use `btn` for enabled button.
 
-### `btnOpacity`, `disabledBtnOpacity`
+#### `btnOpacity`, `disabledBtnOpacity`
 
 For the [`TouchableOpacity`](https://facebook.github.io/react-native/docs/touchableopacity) that encloses the button view. You can use any [View style props](https://github.com/vhpoet/react-native-styling-cheat-sheet#view).
 
-### `btnTxt`, `disabledBtnTxt`
+#### `btnTxt`, `disabledBtnTxt`
 
 Use this to style the text inside submit button. Refer [Text style props](https://github.com/vhpoet/react-native-styling-cheat-sheet#text).
 
-### `itemBoxHighlight`, `activeItemBoxHighlight`
+#### `itemBoxHighlight`, `activeItemBoxHighlight`
 
 You can use this to style the [`TouchableHighlight`](https://facebook.github.io/react-native/docs/touchablehighlight) which wraps your item component. **All border styling must go here**. You can use any [View style props](https://github.com/vhpoet/react-native-styling-cheat-sheet#view) here.
 
-### `itemComponentWrapper`
+#### `itemComponentWrapper`
 
 This is a View that wraps you item component. Wrapping order is like this `TouchableHighlight` > `View` > `itemComponent`. You can use this to get rid of the padding inside box. Refer [View style props](https://github.com/vhpoet/react-native-styling-cheat-sheet#view).
 
-### `tickTextWrapperView`
+#### `tickTextWrapperView`
 
 You can use this to alter the `View` the encloses your tick character. **Tick color is changed here**. Refer [View style props](https://github.com/vhpoet/react-native-styling-cheat-sheet#view).
 
-## FAQs
+## LICENSE
 
-TODO: after sometime
+MIT

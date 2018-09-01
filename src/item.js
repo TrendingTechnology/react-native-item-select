@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import {
-    Alert, View, TouchableHighlight, Text,
+    Text, TouchableHighlight, View,
 } from 'react-native';
 
 import styles from './style';
@@ -34,45 +34,29 @@ const CheckMark = ({ customTickTxt, textStyle, tickPos }) => {
     );
 };
 
-class Item extends Component {
+class Item extends PureComponent {
     constructor(props) {
         super(props);
 
         this.handleSelect = this.handleSelect.bind(this);
-        this.state = {
-            selected: false,
-        };
-    }
-
-    componentDidUpdate(prevProps) {
-        const { selected } = this.props;
-        const { selected: prevSelected } = prevProps;
-
-        if (selected !== prevSelected) this.setState({ selected });
     }
 
     handleSelect() {
-        const { selected } = this.state;
         const {
-            denySelect, index, onSelect, item, maxSelectCount, maxSelectAlertTxt,
+            index, onSelect, item, selected,
         } = this.props;
 
-        if (denySelect && !selected) {
-            return Alert.alert('', maxSelectAlertTxt || `You can't select more than ${maxSelectCount} items`);
-        }
-
-        return onSelect(index, selected, item);
+        onSelect(index, selected, item);
     }
 
     render() {
         const {
             extraItemHighlighProps, item, itemComponent, index, tickPosition,
-            tickStyle, tickTxt, multiselect, styles: customStyles,
+            tickStyle, tickTxt, multiselect, styles: customStyles, selected,
         } = this.props;
         const {
             itemBoxHighlight, itemComponentWrapper, activeItemBoxHighlight, tickTextWrapperView,
         } = customStyles || {};
-        const { selected } = this.state;
         const { itemTouchableHighlight } = styles;
         const borderColor = selected ? 'green' : '#CECECE';
         const highlightStyle = [itemTouchableHighlight];
