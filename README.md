@@ -14,7 +14,6 @@ Sometimes selecting items from dropdowns or checkboxes just don't cut it. You ma
 
 ## Installation
 
-TODO: Publish it to npm.
 ```
 npm install --save react-native-item-select
 ```
