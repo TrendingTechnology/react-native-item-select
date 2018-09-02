@@ -1,6 +1,6 @@
 {
   "name": "react-native-item-select",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "List or Grid viewed item(s) picker for React Native",
   "main": "dist/index.js",
   "scripts": {
@@ -20,7 +20,13 @@
     "select",
     "multiselect",
     "list-view",
-    "grid-view"
+    "grid-view",
+    "react-native-picker",
+    "react-native-component",
+    "android",
+    "ios",
+    "react-native-select",
+    "react-native-muliselect"
   ],
   "author": "Ganapathy S",
   "license": "MIT",
@@ -32,6 +38,9 @@
     "url": "https://github.com/vicke4/react-native-item-select/issues"
   },
   "homepage": "https://github.com/vicke4/react-native-item-select#readme",
+  "dependencies": {
+    "prop-types": "^15.6.2"
+  },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-eslint": "^8.2.6",
@@ -41,6 +50,7 @@
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-react": "^7.11.1",
-    "react": "^16.4.2"
+    "react": "^16.4.2",
+    "react-native": "^0.56.0"
   }
 }
