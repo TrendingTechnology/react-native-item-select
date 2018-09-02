@@ -226,7 +226,7 @@ ReactNativeItemSelect.defaultProps = {
     floatSubmitBtn: false,
     lastRowMargin: 50,
     maxSelectAlertTxt: null,
-    maxSelectCount: 2,
+    maxSelectCount: null,
     minSelectCount: 1,
     multiselect: false,
     styles: {},
