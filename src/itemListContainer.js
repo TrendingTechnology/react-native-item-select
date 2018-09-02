@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
     Alert, ScrollView, Text, TouchableOpacity, View,
 } from 'react-native';
+import PropTypes from 'prop-types';
 
 import Item from './item';
 import styles from './style';
@@ -12,7 +13,7 @@ const SubmitButton = ({
 }) => {
     const {
         btn, btnOpacity, btnTxt, disabledBtnOpacity, disabledBtn, disabledBtnTxt,
-    } = customStyles || {};
+    } = customStyles;
     const { buttonText, buttonView, submitOpacity } = styles;
     const opacityStyle = [
         submitOpacity,
@@ -21,6 +22,7 @@ const SubmitButton = ({
         submitBtnWidth && { marginHorizontal: `${(100 - submitBtnWidth) / 2}%` },
         btnOpacity,
     ];
+    const submitFunc = onSubmit || (() => {});
     let submitItem = selectedItem;
 
     if (multiselect) submitItem = selectedItem && selectedItem.map(obj => obj.item);
@@ -28,20 +30,20 @@ const SubmitButton = ({
     return (
         <TouchableOpacity
             disabled={disableBtn}
-            onPress={() => { onSubmit(submitItem); }}
+            onPress={() => { submitFunc(submitItem); }}
             style={opacityStyle}
             {...extraBtnOpacityProps}
         >
             <View style={[buttonView, btn, disableBtn ? disabledBtn : {}]}>
                 <Text style={[buttonText, btnTxt, disableBtn ? disabledBtnTxt : {}]}>
-                    {submitBtnTitle || 'Submit'}
+                    {submitBtnTitle}
                 </Text>
             </View>
         </TouchableOpacity>
     );
 };
 
-class ItemSelect extends Component {
+class ReactNativeItemSelect extends Component {
     static isDisabled(selectedItem, multiselect, minSelectCount) {
         return (multiselect && selectedItem && selectedItem.length < minSelectCount) || !selectedItem;
     }
@@ -98,13 +100,13 @@ class ItemSelect extends Component {
     }
 
     render() {
-        const { isDisabled, getChunks } = ItemSelect;
+        const { isDisabled, getChunks } = ReactNativeItemSelect;
         const {
             styles: customStyles, data, onSubmit, countPerRow, floatSubmitBtn, submitBtnTitle,
-            multiselect, minSelectCount, lastRowMargin, submitBtnWidth, extraBtnOpacityProps,
+            multiselect, minSelectCount, lastRowMargin, submitBtnWidth, extraBtnOpacityProps, itemComponent,
         } = this.props;
         const { selectedItem } = this.state;
-        const formattedData = getChunks(data, countPerRow || 2);
+        const formattedData = getChunks(data || [], countPerRow);
         const { container, itemWrapper } = styles;
         const { rowWrapper } = customStyles;
         const submitBtnProps = {
@@ -119,7 +121,7 @@ class ItemSelect extends Component {
         };
         const renderSubmitBtn = () => (
             <SubmitButton
-                disableBtn={isDisabled(selectedItem, multiselect, minSelectCount || 1)}
+                disableBtn={isDisabled(selectedItem, multiselect, minSelectCount)}
                 {...submitBtnProps}
             />
         );
@@ -134,7 +136,7 @@ class ItemSelect extends Component {
                                 const isLast = formattedData.length === (index + 1);
 
                                 if (floatSubmitBtn && isLast) {
-                                    extraMargin = { marginBottom: lastRowMargin || 50 };
+                                    extraMargin = { marginBottom: lastRowMargin };
                                 }
 
                                 return (
@@ -163,13 +165,76 @@ class ItemSelect extends Component {
                         }
                     </View>
 
-                    { !floatSubmitBtn && renderSubmitBtn() }
+                    { data && itemComponent && !floatSubmitBtn && renderSubmitBtn() }
                 </ScrollView>
 
-                { floatSubmitBtn && renderSubmitBtn() }
+                { data && itemComponent && floatSubmitBtn && renderSubmitBtn() }
             </View>
         );
     }
 }
 
-export default ItemSelect;
+ReactNativeItemSelect.propTypes = {
+    data: PropTypes.instanceOf(Array).isRequired,
+    itemComponent: PropTypes.func.isRequired,
+    onSubmit: PropTypes.func.isRequired,
+    countPerRow: PropTypes.number,
+    extraItemHighlighProps: PropTypes.instanceOf(Object),
+    extraBtnOpacityProps: PropTypes.instanceOf(Object),
+    floatSubmitBtn: PropTypes.bool,
+    lastRowMargin: PropTypes.number,
+    maxSelectAlertTxt: PropTypes.string,
+    maxSelectCount: PropTypes.number,
+    minSelectCount: PropTypes.number,
+    multiselect: PropTypes.bool,
+    styles: PropTypes.shape({
+        btn: PropTypes.instanceOf(Object),
+        disabledBtn: PropTypes.instanceOf(Object),
+        btnOpacity: PropTypes.instanceOf(Object),
+        disabledBtnOpacity: PropTypes.instanceOf(Object),
+        btnTxt: PropTypes.instanceOf(Object),
+        disabledBtnTxt: PropTypes.instanceOf(Object),
+        itemBoxHighlight: PropTypes.instanceOf(Object),
+        activeItemBoxHighlight: PropTypes.instanceOf(Object),
+        itemComponentWrapper: PropTypes.instanceOf(Object),
+        tickTxt: PropTypes.instanceOf(Object),
+        rowWrapper: PropTypes.instanceOf(Object),
+    }),
+    submitBtnTitle: PropTypes.string,
+    submitBtnWidth: PropTypes.number,
+    tickPosition: PropTypes.oneOf([
+        'topLeft',
+        'topRight',
+        'topMiddle',
+        'bottomLeft',
+        'bottomRight',
+        'bottomMiddle',
+        'middle',
+        'leftMiddle',
+        'rightMiddle']),
+    tickStyle: PropTypes.oneOf(['check', 'overlayCheck']),
+    tickTxt: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.instanceOf(Object),
+    ]),
+};
+
+ReactNativeItemSelect.defaultProps = {
+    countPerRow: 2,
+    extraItemHighlighProps: {},
+    extraBtnOpacityProps: {},
+    floatSubmitBtn: false,
+    lastRowMargin: 50,
+    maxSelectAlertTxt: null,
+    maxSelectCount: 2,
+    minSelectCount: 1,
+    multiselect: false,
+    styles: {},
+    submitBtnTitle: 'Submit',
+    submitBtnWidth: 100,
+    tickPosition: null,
+    tickStyle: null,
+    tickTxt: <Text>&#x2713;</Text>,
+};
+
+export default ReactNativeItemSelect;

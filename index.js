@@ -1,3 +1,3 @@
-import itemSelect from './src/itemListContainer';
+import ReactNativeItemSelect from './src/itemListContainer';
 
-export default itemSelect;
+export default ReactNativeItemSelect;

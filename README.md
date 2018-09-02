@@ -29,6 +29,35 @@ npm install --save react-native-item-select
 ## Example
 
 ```jsx
+import React, {Component} from 'react';
+import { Text, View } from 'react-native';
+import ReactNativeSelect from 'react-native-item-select';
+
+class LanguageSelectionScreen extends Component {
+  render() {
+    const textStyle = { textAlign: 'center', color: '#696969', fontWeight: 'bold' };
+    const data = [
+      { firstLetter: 'அ', displayName: 'தமிழ்', name: 'Tamil' },
+      { firstLetter: 'A', displayName: 'English', name: 'English' },
+      ...
+    ];
+
+    return (
+      <ReactNativeSelect
+        data={data}
+        itemComponent={
+          item => (
+            <View>
+                <Text style={{ ...textStyle, fontSize: 35 }}>{item.firstLetter}</Text>
+                <Text style={textStyle}>{item.displayName}</Text>
+            </View>
+          )
+        }
+        onSubmit={item => navigate('Result')}
+      />
+    );
+  }
+}
 ```
 
 ## Props

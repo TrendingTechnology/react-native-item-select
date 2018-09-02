@@ -23,7 +23,7 @@ const CheckMark = ({ customTickTxt, textStyle, tickPos }) => {
     const viewStyle = {
         position: 'absolute', justifyContent: 'center', alignItems: 'center', zIndex: 1,
     };
-    const textContent = customTickTxt || <Text>&#x2713;</Text>;
+    const textContent = customTickTxt;
 
     return (
         <View style={{ ...viewStyle, ...positionMapping[tickPos] }}>
@@ -54,9 +54,10 @@ class Item extends PureComponent {
             extraItemHighlighProps, item, itemComponent, index, tickPosition,
             tickStyle, tickTxt, multiselect, styles: customStyles, selected,
         } = this.props;
+        const renderFunc = itemComponent || (() => {});
         const {
             itemBoxHighlight, itemComponentWrapper, activeItemBoxHighlight, tickTxt: textStyle,
-        } = customStyles || {};
+        } = customStyles;
         const { itemTouchableHighlight } = styles;
         const borderColor = selected ? 'green' : '#CECECE';
         const highlightStyle = [itemTouchableHighlight];
@@ -81,7 +82,7 @@ class Item extends PureComponent {
                 <View style={[{ padding: 5 }, itemComponentWrapper]}>
                     <View>
                         {selected && <CheckMark {...tickProps} />}
-                        {itemComponent(item, selected)}
+                        {renderFunc(item, selected)}
                     </View>
                 </View>
             </TouchableHighlight>
