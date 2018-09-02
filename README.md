@@ -2,8 +2,15 @@
 
 Sometimes selecting items from dropdowns or checkboxes just don't cut it. You may need a fancy grid item picker. May be this highly customizable List Grid item(s) picker for React Native is what you're looking for.
 
+<br />
+<p align="middle">
+  <img src="https://i.imgur.com/1q43At0.gif" hspace="35" />
+  <img src="https://i.imgur.com/abhxlfV.gif" />
+</p>
+
 * [Installation](#installation)
 * [Features](#features-tada)
+* [Demo](#demo)
 * [Example](#example)
 * [Props](#props)
   * [Required Props](#required-props)
@@ -24,6 +31,10 @@ npm install --save react-native-item-select
 - Multiselect supported.
 - Validation for minimum & maximum no of items to be selected.
 - Fine-grained style control.
+
+## Demo
+
+You can see the code for the GIF files given above at this [repo](https://github.com/vicke4/rn-item-select-demo).
 
 ## Example
 
@@ -68,7 +79,7 @@ We can divide props into two types. One is mandatory other one is optional. With
   Name         | Type     | Description
 ---------------|----------|-----------------------------------------------------------------------
 data           | Array    | Array of items you pass to `itemComponent` callback.
-itemComponent  | Function | Takes 2 parameters and returns a React component. Two paramerts, `(item, selected)`. `item`: `data` prop item, `selected`: `boolean` that suggested whether the item is selected. `selected` boolean is useful when you want to alter the content if it is selected.
+itemComponent  | Function | Takes 2 parameters and returns a React component. Two paramerts, `(item, selected)`. `item`: `data` prop item, `selected`: `boolean` that suggests whether the item is selected. `selected` boolean is useful when you want to alter the content if it is selected.
 onSubmit       | Function | Callback function that consumes selected item(s).
 
 ### Optional Props
@@ -77,11 +88,11 @@ Name                   |    Type    |       Default       |          Description
 -----------------------|------------|---------------------|---------------------------------
 multiselect            |   Boolean  |    false            |  Pass this to enable multiselect
 countPerRow            |   Number   |      2              |  No of items to display per row, pass 1 for list view
-floatSubmitBtn         |   Boolean  |    false            |  When the number of items increases, you may want to float the submit button at the botton of the screen. Pass this prop to do so.
+floatSubmitBtn         |   Boolean  |    false            |  When the number of items increase, you may want to float the submit button at the botton of the screen. Pass this prop to do so.
 lastRowMargin          |   Number   |      50             |   This only takes effect when you float submit button. Most often floating button will hinder the view of last row. This is to avoid it.
 submitBtnTitle         |   String   |    Submit           |   Change submit button title
 minSelectCount         |   Number   |       1             |   Valid only when multiselect is enabled. Minimum number of items to be selected to enable submit button.
-maxSelectCount         |   Number   |       2             |  Valid only when multiselect is enabled. To set max limit on the number of items selected. Displays an alert when user tries to select more items.
+maxSelectCount         |   Number   |      null           |  Valid only when multiselect is enabled. To set max limit on the number of items selected. Displays an alert when user tries to select more items.
 maxSelectAlertTxt      |   String   |  Check description  |  To change the alert text. Default: `You can't select more than N items.`
 tickStyle              |   String   |  Check description  |  Valid params: `check`, `overlayCheck`. For single select `check` is default. `overlayCheck` is default for multiselect
 tickPosition           |   String   |  Check description  |  Default values: single select - `topRight`, multiselect - `middle`. However, you can override the default by passing custom value. Valid params: `topLeft`, `topRight`, `topMiddle`, `bottomLeft`, `bottomRight`, `bottomMiddle`, `middle`, `leftMiddle`, `rightMiddle`
@@ -93,7 +104,7 @@ styles                 |   Object   |       {}            |   For customer styli
 
 ## Styling
 
-You can alter the styles of any component of this library by passing appropriate prop. For now you can use 10 keys in styles prop to customize the look. They are, `btn`, `btnOpacity`, `btnTxt`, `disabledBtnOpacity`, `disabledBtn`, `disabledBtnTxt`, `itemBoxHighlight`, `activeItemBoxHighlight`, `tickTxt`, `itemComponentWrapper`, `rowWrapper`
+You can alter the styles of any component of this library by passing appropriate prop. For now you can use 11 keys in styles prop to customize the look. They are, `btn`, `btnOpacity`, `btnTxt`, `disabledBtnOpacity`, `disabledBtn`, `disabledBtnTxt`, `itemBoxHighlight`, `activeItemBoxHighlight`, `tickTxt`, `itemComponentWrapper`, `rowWrapper`
 
 ### Example
 
@@ -133,7 +144,7 @@ You can use this to style the [`TouchableHighlight`](https://facebook.github.io/
 
 #### `itemComponentWrapper`
 
-This is a View that wraps you item component. Wrapping order is like this `TouchableHighlight` > `View` > `itemComponent`. You can use this to get rid of the padding inside box. Refer [View style props](https://github.com/vhpoet/react-native-styling-cheat-sheet#view).
+This is a View that wraps your item component. Wrapping order is like this `TouchableHighlight` > `View` > `itemComponent`. You can use this to get rid of the padding inside box. Refer [View style props](https://github.com/vhpoet/react-native-styling-cheat-sheet#view).
 
 #### `tickTxt`
 
