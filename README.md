@@ -41,7 +41,7 @@ You can see the code for the GIF files given above at this [repo](https://github
 ```jsx
 import React, {Component} from 'react';
 import { Text, View } from 'react-native';
-import ReactNativeSelect from 'react-native-item-select';
+import ReactNativeItemSelect from 'react-native-item-select';
 
 class LanguageSelectionScreen extends Component {
   render() {
@@ -53,7 +53,7 @@ class LanguageSelectionScreen extends Component {
     ];
 
     return (
-      <ReactNativeSelect
+      <ReactNativeItemSelect
         data={data}
         itemComponent={
           item => (
