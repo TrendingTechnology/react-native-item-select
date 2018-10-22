@@ -15,8 +15,10 @@ Sometimes selecting items from dropdowns or checkboxes just don't cut it. You ma
 * [Props](#props)
   * [Required Props](#required-props)
   * [Optional Props](#optional-props)
-* [Styling](#styling)
+* [Preselect Items](#preselect-items)
   * [Example](#example-1)
+* [Styling](#styling)
+  * [Example](#example-2)
 
 
 ## Installation
@@ -31,6 +33,7 @@ npm install --save react-native-item-select
 - Multiselect supported.
 - Validation for minimum & maximum no of items to be selected.
 - Fine-grained style control.
+- Preselect items.
 
 ## Demo
 
@@ -100,7 +103,24 @@ submitBtnWidth         |   Number   |      100            |   This number repres
 tickTxt                |   String   |       ✔             |   Pass some string to change the tick string rendered.
 extraItemHighlighProps |   Object   |       {}            |   This is to alter existing prop value or to add new values to the [`TouchableHighlight`](https://facebook.github.io/react-native/docs/touchablehighlight) component that encloses your `itemComponent`.
 extraBtnOpacityProps   |   Object   |       {}            |   Use this to pass props to [`TouchableOpacity`](https://facebook.github.io/react-native/docs/touchableopacity) that encloses the submit button.
-styles                 |   Object   |       {}            |   For customer styling you can use this prop. Refer [styling](#styling) section.
+styles                 |   Object   |       {}            |   For custom styling you can use this prop. Refer [styling](#styling) section.
+
+## Preselect Items
+
+In some cases, you may want to preselect items when `ReactNativeItemSelect` renders. That can be achieved by setting `selected` property of the items in `data` array. In the following example, Apple &amp; Orange are preselected.
+
+### Example
+```jsx
+<ReactNativeItemSelect
+    data={[
+      { name: 'Apple', selected: true},
+      { name: 'Banana' },
+      { name: 'Orange', selected: true}
+    ]}
+    itemComponent={this.itemComponent}
+    onSubmit={this.onSubmit}
+/>
+```
 
 ## Styling
 

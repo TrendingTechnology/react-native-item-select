@@ -50,14 +50,26 @@ class ReactNativeItemSelect extends Component {
 
     constructor(props) {
         super(props);
+        const { data, countPerRow } = props;
 
         const { multiselect } = props;
 
         this.state = {
+            formattedData: ReactNativeItemSelect.getChunks(data || [], countPerRow),
             indexMapping: {},
             selectedItem: multiselect && [],
         };
         this.onSelect = this.onSelect.bind(this);
+    }
+
+    componentDidMount() {
+        const { formattedData } = this.state;
+
+        formattedData.forEach((chunkData, index) => {
+            chunkData.forEach((item, chunkIndex) => {
+                if (item.selected) this.onSelect(`${index}_${chunkIndex}`, false, item);
+            });
+        });
     }
 
     onSelect(index, selected, item) {
@@ -100,13 +112,12 @@ class ReactNativeItemSelect extends Component {
     }
 
     render() {
-        const { isDisabled, getChunks } = ReactNativeItemSelect;
+        const { isDisabled } = ReactNativeItemSelect;
         const {
-            styles: customStyles, data, onSubmit, countPerRow, floatSubmitBtn, submitBtnTitle,
+            styles: customStyles, data, onSubmit, floatSubmitBtn, submitBtnTitle,
             multiselect, minSelectCount, lastRowMargin, submitBtnWidth, extraBtnOpacityProps, itemComponent,
         } = this.props;
-        const { selectedItem } = this.state;
-        const formattedData = getChunks(data || [], countPerRow);
+        const { selectedItem, formattedData } = this.state;
         const { container, itemWrapper } = styles;
         const { rowWrapper } = customStyles;
         const submitBtnProps = {
