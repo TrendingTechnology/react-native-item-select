@@ -105,7 +105,7 @@ tickTxt                |   String   |       ✔             |   Pass some string
 extraItemHighlighProps |   Object   |       {}            |   This is to alter existing prop value or to add new values to the [`TouchableHighlight`](https://facebook.github.io/react-native/docs/touchablehighlight) component that encloses your `itemComponent`.
 extraBtnOpacityProps   |   Object   |       {}            |   Use this to pass props to [`TouchableOpacity`](https://facebook.github.io/react-native/docs/touchableopacity) that encloses the submit button.
 styles                 |   Object   |       {}            |   For custom styling you can use this prop. Refer [styling](#styling) section.
-searchKey              |   String   |      null           |   If you want to implement search, you've to pass this prop. Check [search implementation](##search-implementation) section.
+searchKey              |   String   |      null           |   If you want to implement search, you've to pass this prop. Check [search implementation](#search-implementation) section.
 
 ## Preselect Items
 
