@@ -178,7 +178,7 @@ Used to alter the style of the View that wraps the items in a row.  Refer [View 
 
 ## Search Implementation
 
-To make `ReactNativeItemSelect` more customizable styling & implementation of text box for search has to be implemented by the user. You can easily implement search by making use of the state of the parent component. You need to pass `searchKey` prop to make search work. Just make sure the value of the `searchKey` is unique for all items. For your better understanding, search has already been implemented in the customized example of demo app - [source code](https://github.com/vicke4/rn-item-select-demo/blob/master/src/multiselect.js).
+To make `ReactNativeItemSelect` more customizable, styling & implementation of text box for search has to be implemented by the user. You can easily implement search by making use of the state of the parent component. You need to pass `searchKey` prop to make search work. Just make sure the value of the `searchKey` is unique for all items. For your better understanding, search has already been implemented in the customized example of demo app - [source code](https://github.com/vicke4/rn-item-select-demo/blob/master/src/multiselect.js).
 
 NOTE: Search implementation is not part of the GIF shown above. Search feature was added after the creation of demo GIF.
 
