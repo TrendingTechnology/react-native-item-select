@@ -19,7 +19,7 @@ Sometimes selecting items from dropdowns or checkboxes just don't cut it. You ma
   * [Example](#example-1)
 * [Styling](#styling)
   * [Example](#example-2)
-
+* [Search Implementation](#search-implementation)
 
 ## Installation
 
@@ -34,6 +34,7 @@ npm install --save react-native-item-select
 - Validation for minimum & maximum no of items to be selected.
 - Fine-grained style control.
 - Preselect items.
+- Provision to implement search.
 
 ## Demo
 
@@ -82,7 +83,7 @@ We can divide props into two types. One is mandatory other one is optional. With
   Name         | Type     | Description
 ---------------|----------|-----------------------------------------------------------------------
 data           | Array    | Array of items you pass to `itemComponent` callback.
-itemComponent  | Function | Takes 2 parameters and returns a React component. Two paramerts, `(item, selected)`. `item`: `data` prop item, `selected`: `boolean` that suggests whether the item is selected. `selected` boolean is useful when you want to alter the content if it is selected.
+itemComponent  | Function | Takes 2 parameters and returns a React element. Two paramerts, `(item, selected)`. `item`: `data` prop item, `selected`: `boolean` that suggests whether the item is selected. `selected` boolean is useful when you want to alter the content if it is selected.
 onSubmit       | Function | Callback function that consumes selected item(s).
 
 ### Optional Props
@@ -104,6 +105,7 @@ tickTxt                |   String   |       ✔             |   Pass some string
 extraItemHighlighProps |   Object   |       {}            |   This is to alter existing prop value or to add new values to the [`TouchableHighlight`](https://facebook.github.io/react-native/docs/touchablehighlight) component that encloses your `itemComponent`.
 extraBtnOpacityProps   |   Object   |       {}            |   Use this to pass props to [`TouchableOpacity`](https://facebook.github.io/react-native/docs/touchableopacity) that encloses the submit button.
 styles                 |   Object   |       {}            |   For custom styling you can use this prop. Refer [styling](#styling) section.
+searchKey              |   String   |      null           |   If you want to implement search, you've to pass this prop. Check [search implementation](##search-implementation) section.
 
 ## Preselect Items
 
@@ -173,6 +175,12 @@ You can use this to alter the `View` the encloses your tick character. **Tick co
 #### `rowWrapper`
 
 Used to alter the style of the View that wraps the items in a row.  Refer [View style props](https://github.com/vhpoet/react-native-styling-cheat-sheet#view).
+
+## Search Implementation
+
+To make `ReactNativeItemSelect` more customizable styling & implementation of text box for search has to be implemented by the user. You can easily implement search by making use of the state of the parent component. You need to pass `searchKey` prop to make search work. Just make sure the value of the `searchKey` is unique for all items. For your better understanding, search has already been implemented in the customized example of demo app - [source code](https://github.com/vicke4/rn-item-select-demo/blob/master/src/multiselect.js).
+
+NOTE: Search implementation is not part of the GIF shown above. Search feature was added after the creation of demo GIF.
 
 ## LICENSE
 

@@ -64,12 +64,27 @@ class ReactNativeItemSelect extends Component {
 
     componentDidMount() {
         const { formattedData } = this.state;
+        const { searchKey } = this.props;
 
         formattedData.forEach((chunkData, index) => {
             chunkData.forEach((item, chunkIndex) => {
-                if (item.selected) this.onSelect(`${index}_${chunkIndex}`, false, item);
+                if (item.selected) {
+                    const mapKey = searchKey ? item[searchKey] : `${index}_${chunkIndex}`;
+                    this.onSelect(mapKey, false, item);
+                }
             });
         });
+    }
+
+    componentDidUpdate(prevProps) {
+        const { searchKey, data, countPerRow } = this.props;
+        const { data: prevData } = prevProps;
+
+        if (searchKey && data.length !== prevData.length) {
+            this.setState({
+                formattedData: ReactNativeItemSelect.getChunks(data || [], countPerRow),
+            });
+        }
     }
 
     onSelect(index, selected, item) {
@@ -114,7 +129,7 @@ class ReactNativeItemSelect extends Component {
     render() {
         const { isDisabled } = ReactNativeItemSelect;
         const {
-            styles: customStyles, data, onSubmit, floatSubmitBtn, submitBtnTitle,
+            styles: customStyles, data, onSubmit, floatSubmitBtn, submitBtnTitle, searchKey,
             multiselect, minSelectCount, lastRowMargin, submitBtnWidth, extraBtnOpacityProps, itemComponent,
         } = this.props;
         const { selectedItem, formattedData } = this.state;
@@ -154,13 +169,14 @@ class ReactNativeItemSelect extends Component {
                                     <View key={String(index)} style={[itemWrapper, extraMargin, rowWrapper]}>
                                         {
                                             chunkData.map((item, chunkIndex) => {
+                                                const mapKey = searchKey ? item[searchKey] : `${index}_${chunkIndex}`;
                                                 const {
-                                                    indexMapping: { [`${index}_${chunkIndex}`]: isSelected },
+                                                    indexMapping: { [mapKey]: isSelected },
                                                 } = this.state;
 
                                                 return (
                                                     <Item
-                                                        index={`${index}_${chunkIndex}`}
+                                                        index={mapKey}
                                                         onSelect={this.onSelect}
                                                         key={String(chunkIndex)}
                                                         selected={isSelected}
@@ -211,6 +227,7 @@ ReactNativeItemSelect.propTypes = {
         tickTxt: PropTypes.instanceOf(Object),
         rowWrapper: PropTypes.instanceOf(Object),
     }),
+    searchKey: PropTypes.string,
     submitBtnTitle: PropTypes.string,
     submitBtnWidth: PropTypes.number,
     tickPosition: PropTypes.oneOf([
@@ -241,6 +258,7 @@ ReactNativeItemSelect.defaultProps = {
     minSelectCount: 1,
     multiselect: false,
     styles: {},
+    searchKey: null,
     submitBtnTitle: 'Submit',
     submitBtnWidth: 100,
     tickPosition: null,
